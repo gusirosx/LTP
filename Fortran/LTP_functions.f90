@@ -3,6 +3,7 @@ module functions
     use schemes
     implicit none
     contains
+    !================================================================
     subroutine norm_function(S)
         !Normalization by the max value of a 2D array
         double precision, dimension(:,:):: S
@@ -13,7 +14,8 @@ module functions
             do j=1,N
                 S(i,j) = S(i,j)/F
             end do
-        end do 
+        end do
+        !S = S/F
     end subroutine norm_function
     !================================================================
     subroutine deltas()
@@ -21,8 +23,7 @@ module functions
         alpha = theta*pi/180d0
         dx = 1.0d0/(N-1.0d0) 
         dy = dx
-        dt = 0.98d0*dx*dx
-        !dt = 2*dx/(Pe*cos(alpha))
+        !dt = 0.98d0*dx*dx
         dt = 0.98*(4*dx)/(3*Pe*cos(alpha))
         !Determine the x and y positions for solutions A, B, C, D
         x = 0.0d0; y = 0.0d0
@@ -70,7 +71,7 @@ module functions
         VTOL =0.1d0
         do while (TOL <= VTOL)
             !X Direction
-            S_a = S_sch !Copy the elements from T to Ta
+            S_a = S_sch !Copy the elements from S_sch to S_a
             if(op.eq.4 .or. op.eq.5) call RHS_schemes(op,S_a,S_rhs)
             do i = 2,N-1
                 do j = 2,N-1
@@ -93,7 +94,7 @@ module functions
                 end do
                 call TDMA(A,B,C,D,TS,N-2)
                 do j = 2,N-1
-                    S_sch(i,j) = TS(j-1) !Stores TDMA values ​​in matrix T
+                    S_sch(i,j) = TS(j-1) !Stores TDMA values ​​in matrix
                 end do
             end do
             !Y Direction
@@ -133,7 +134,7 @@ module functions
         deallocate(S_a,S_rhs,A,B,C,D,TS)
     end subroutine ADI_S
     !================================================================
-    subroutine ADI_MOD(S_sch,op)!Modified ADI for the QUICK and SOU schemes
+    subroutine ADI_MOD(S_sch,op)!Modified ADI for WW and SS terms
         double precision:: Ax1,Bx1,Dpx1,Dpy1,Ay1,By1,Cx,Cy,VTOL, &
                            Ax2,Bx2,Dpx2,Dpy2,Ay2,By2,Yss,Xww
         double precision, allocatable, dimension(:):: A,B,C,D,TS
@@ -145,7 +146,7 @@ module functions
         VTOL =0.1d0
         do while (TOL <= VTOL)
             !X Direction
-            S_a = S_sch !Copy the elements from T to Ta
+            S_a = S_sch !Copy the elements from S_sch to S_a
             do i = 2,N-1
                 if (i.eq.2) then
                     do j = 2,N-1
@@ -193,7 +194,7 @@ module functions
                 end if
                 call TDMA(A,B,C,D,TS,N-2)
                 do j = 2,N-1
-                    S_sch(i,j) = TS(j-1) !Stores TDMA values ​​in matrix T
+                    S_sch(i,j) = TS(j-1) !Stores TDMA values ​​in matrix
                 end do
             end do
             !Y Direction
@@ -308,7 +309,7 @@ module functions
                 do j=1,N
                     S = x(j)*cos(alpha) + y(i)*sin(alpha)
                     M = y(i)*cos(alpha) - x(j)*sin(alpha)
-                    S_sol(i,j) = exp(Pe*S*0.5)*sin(C*S)*exp(lamb*M)
+                    S_sol(i,j) = exp(Pe*S*0.5)*cos(C*S)*exp(lamb*M)
                 end do
             end do 
         end if
@@ -344,7 +345,7 @@ module functions
     end subroutine w_fille
     !================================================================
     subroutine RMS(e_rms,S_aprox,S_exat)
-        !select which ADI to use
+        !Calculating the RMS of a matrix
         double precision, allocatable, dimension(:,:):: S_aprox,S_exat
         double precision :: Ei, e_rms
         integer :: i,j

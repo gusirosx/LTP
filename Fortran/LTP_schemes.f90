@@ -8,20 +8,28 @@ module schemes
         double precision :: ax,bx,cx,dpx,ay,by,cy,dpy
         double precision,optional :: axm,bxm,dpxm,aym,bym,dpym,xww,yss
         integer :: op
-        if(op.eq.1) call CDS(ax,bx,cx,dpx,ay,by,cy,dpy)
-        if(op.eq.2) call FOU(ax,bx,cx,dpx,ay,by,cy,dpy)
-        if(op.eq.3 .or. op.eq.4 .or. op.eq.5) call EXPO(ax,bx,cx,dpx,ay,by,cy,dpy)
-        if(op.eq.6) call SOU(ax,bx,dpx,ay,by,dpy,axm,bxm,dpxm,aym,bym,dpym,cx,cy,xww,yss)
-        if(op.eq.7) call QUICK(ax,bx,dpx,ay,by,dpy,axm,bxm,dpxm,aym,bym,dpym,cx,cy,xww,yss)
-        !Revisar os ifs
+        if(op.eq.1) then 
+            call CDS(ax,bx,cx,dpx,ay,by,cy,dpy)
+        else if(op.eq.2) then 
+            call FOU(ax,bx,cx,dpx,ay,by,cy,dpy)
+        else if(op.ge.3 .and. op.le.5) then 
+            call EXPO(ax,bx,cx,dpx,ay,by,cy,dpy)
+        else if(op.eq.6) then 
+            call SOU(ax,bx,dpx,ay,by,dpy,axm,bxm,dpxm,aym,bym,dpym,cx,cy,xww,yss)
+        else if(op.eq.7) then 
+            call QUICK(ax,bx,dpx,ay,by,dpy,axm,bxm,dpxm,aym,bym,dpym,cx,cy,xww,yss)
+        end if
     end subroutine scheme_Selection
     !================================================================
     subroutine RHS_schemes(op,Taux,RHS)
-        !Calculates of LOADS or UNIFAES
+        !Calculates RHS of LOADS or UNIFAES
         double precision, dimension(:,:) :: Taux,RHS
         integer :: op
-        if(op.eq.4) call LOADS_RHS(Taux,RHS)
-        if(op.eq.5) call UNIFAES_RHS(Taux,RHS)
+        if(op.eq.4) then
+            call LOADS_RHS(Taux,RHS)
+        else if(op.eq.5) then
+            call UNIFAES_RHS(Taux,RHS)
+        end if
     end subroutine RHS_schemes
     !================================================================
     subroutine CDS(ax,bx,cx,dpx,ay,by,cy,dpy)

@@ -13,6 +13,7 @@ module schemes
         if(op.eq.3 .or. op.eq.4 .or. op.eq.5) call EXPO(ax,bx,cx,dpx,ay,by,cy,dpy)
         if(op.eq.6) call SOU(ax,bx,dpx,ay,by,dpy,axm,bxm,dpxm,aym,bym,dpym,cx,cy,xww,yss)
         if(op.eq.7) call QUICK(ax,bx,dpx,ay,by,dpy,axm,bxm,dpxm,aym,bym,dpym,cx,cy,xww,yss)
+        !Revisar os ifs
     end subroutine scheme_Selection
     !================================================================
     subroutine RHS_schemes(op,Taux,RHS)
@@ -141,8 +142,8 @@ module schemes
         OPshem = 'LOADS'
         Px = Pe*dx*cos(alpha)
         Py = Pe*dy*sin(alpha)
-        Pix = Px/(exp(Px) - 1)
-        Piy = Py/(exp(Py) - 1)
+        Pix = Px/(exp(Px) - 1.0)
+        Piy = Py/(exp(Py) - 1.0)
         Xx = ((Pix - 1)/Px) + 0.5
         Xy = ((Piy - 1)/Py) + 0.5
         Aux = (Xx/(4*dy*dy))*dt
@@ -167,8 +168,8 @@ module schemes
         OPshem = 'UNIFAES'
         Px = Pe*dx*cos(alpha)
         Py = Pe*dy*sin(alpha)
-        Pix = Px/(exp(Px) - 1)
-        Piy = Py/(exp(Py) - 1)
+        Pix = Px/(exp(Px) - 1.0)
+        Piy = Py/(exp(Py) - 1.0)
         Xx = ((Pix - 1)/Px) + 0.5
         Xy = ((Piy - 1)/Py) + 0.5
         PIax = Pix/(dx*dx)

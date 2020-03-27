@@ -10,12 +10,7 @@ module functions
         integer :: i,j
         real :: F
         F = maxval(S) - minval(S)
-        do i=1,N
-            do j=1,N
-                S(i,j) = S(i,j)/F
-            end do
-        end do
-        !S = S/F
+        S = S/F
     end subroutine norm_function
     !================================================================
     subroutine deltas()
@@ -55,8 +50,11 @@ module functions
         !select which ADI to use
         double precision, allocatable, dimension(:,:):: S_sch
         integer :: op
-        if(op.ge.1 .and. op.le.5) call ADI_S(S_sch,op)
-        if(op.ge.6 .and. op.le.7) call ADI_MOD(S_sch,op)
+        if(op.ge.1 .and. op.le.5) then
+            call ADI_S(S_sch,op)
+        else if(op.ge.6 .and. op.le.7) then 
+            call ADI_MOD(S_sch,op)
+        end if
     end subroutine ADI
     !================================================================
     subroutine ADI_S(S_sch,op)!Standard ADI

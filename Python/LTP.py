@@ -11,7 +11,7 @@ N          = 11                 #Number of Control Volumes in x and y
 #----------- ERROR EVALUATION ROUTINE ----------#
 rms_flag   = False              #Enables or disables the rms routine
 N_i        = 10                 #Initial mesh
-N_f        = 50                #Final mesh
+N_f        = 100                #Final mesh
 IJ         = 10                 #Jump Interval
 pi         = np.pi              #Pi number
 x = np.zeros(N,dtype = float)   #Determine the x positions

@@ -23,6 +23,8 @@
             name = trim(OPshem)//trim('_function_') // trim(OPfunc)//trim('.txt')
             call w_fille(S_copy,name,20)
         end do
+        name = trim('Exact_solution_') // trim(OPfunc)//trim('.txt')
+        call w_fille(S_exact,name,20)        
         deallocate(S_copy,S_exact,S_calc,x,y)
     end subroutine Scheme_routine
     !================================================================

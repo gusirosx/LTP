@@ -7,27 +7,31 @@
     !================================================================
     subroutine Scheme_routine
         !Scheme evaluation routine
-        integer :: i,op
+        double precision, allocatable, dimension(:,:):: S_copy
+        integer :: op 
         write(*,*)'============================================================'
         write(*,*)'                                                            '
         write(*,*)'                 Scheme Evaluation Routine                  '
         write(*,*)'                                                            '
         write(*,*)'============================================================'
-        allocate(S_exact(N,N),S_calc(N,N),x(N),y(N))
+        allocate(S_copy(N,N),S_exact(N,N),S_calc(N,N),x(N),y(N))
         call deltas()   !calculates dx, dy, dt
+        call exact_functions(S_exact,S_calc)
         do op=1,7
-            call exact_functions(S_exact,S_calc)
-            call ADI(S_calc,op)
+            S_copy = S_calc !Copy the elements from S_calc to S_copy
+            call ADI(S_copy,op)
             name = trim(OPshem)//trim('_function_') // trim(OPfunc)//trim('.txt')
-            call w_fille(S_calc,name,20)
+            call w_fille(S_copy,name,20)
         end do
-        deallocate(S_exact,S_calc,x,y)
+        name = trim('Exact_solution_') // trim(OPfunc)//trim('.txt')
+        call w_fille(S_exact,name,20)        
+        deallocate(S_copy,S_exact,S_calc,x,y)
     end subroutine Scheme_routine
     !================================================================
     subroutine ERROR_routine
         !Calculates the RMS error
         integer, allocatable, dimension(:):: rms_v
-        double precision, allocatable, dimension(:,:):: RMS_e
+        double precision, allocatable, dimension(:,:):: RMS_e, S_copy
         integer :: i,op,N_a
         N_a = N_F/IJ
         allocate(rms_v(N_a),RMS_e(N_a,7))
@@ -41,14 +45,15 @@
         do i = 1,N_a
             N = rms_v(i)
             write(*,*) 'Grid:',N
-            allocate(S_exact(N,N),S_calc(N,N),x(N),y(N))
+            allocate(S_copy(N,N),S_exact(N,N),S_calc(N,N),x(N),y(N))
             call deltas()   !calculates dx, dy, dt
             call exact_functions(S_exact,S_calc)
             do op = 1,7
-                call ADI(S_calc,op)
-                call RMS(RMS_e(i,op),S_calc,S_exact)
+                S_copy = S_calc !Copy the elements from S_calc to S_copy
+                call ADI(S_copy,op)
+                call RMS(RMS_e(i,op),S_copy,S_exact)
             end do
-            deallocate(S_exact,S_calc,x,y)
+            deallocate(S_copy,S_exact,S_calc,x,y)
         end do
         name = trim('RMS_function_') // trim(OPfunc)//trim('.txt')
         call w_fille(RMS_e,name,20)

@@ -1,15 +1,19 @@
-FC=gfortran
+PROGRAM = LTP
+FC   = gfortran
 
 #DEBUG
 #FFLAGS=-c -fbounds-check
 
 #RUN
 FFLAGS=-c
+#FFLAGS=-c -O3
+#FFLAGS=-c -O4
+#FFLAGS=-c -O5
 
 FSOURCES=LTP_main.o LTP_global.o LTP_functions.o LTP_schemes.o LTP_routines.o
 
-LTP:  $(FSOURCES)
-	$(FC)  $(FSOURCES) -o LTP
+$(PROGRAM): $(FSOURCES)
+	$(FC)  $(FSOURCES) -o $(PROGRAM)
 
 LTP_global.mod: LTP_global.f90 LTP_global.o 
 	$(FC) $(FFLAGS) LTP_global.f90
@@ -37,6 +41,10 @@ LTP_routines.o: LTP_routines.f90 LTP_global.mod LTP_schemes.mod LTP_functions.mo
 
 LTP_main.o: LTP_main.f90  LTP_routines.mod
 	$(FC) $(FFLAGS) LTP_main.f90
+
+run: $(PROGRAM)
+	./$(PROGRAM)
+
 clean:
 	rm -f *.f90~
 	rm -f *.mod

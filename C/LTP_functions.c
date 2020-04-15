@@ -239,7 +239,7 @@ void ADI_S(int op)//Standard ADI
             }
         }
         if (VTOL <= TOL){
-            printf("C.R.I: %d %s",icnt,OPshem);
+            printf("C.R.I: %d %s\n",icnt,OPshem);
             break;
         }
     }
@@ -386,7 +386,7 @@ void ADI_MOD(int op)//Modified ADI for WW and SS terms
             }
         }
         if (VTOL <= TOL){
-            printf("C.R.I: %d %s",icnt,OPshem);
+            printf("C.R.I: %d %s\n",icnt,OPshem);
             break;
         }
     }

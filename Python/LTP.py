@@ -483,11 +483,12 @@ def Scheme_routine():
     print('                                                            ')
     print('============================================================')
     deltas()   #calculates dx, dy, dt
+    exact_functions(S_exact,S_calc)
     for op in range(1,8):
-        exact_functions(S_exact,S_calc)
-        ADI(S_calc,op)
-        np.savetxt(OPshem + '_function_' + OPfunc + '.txt',S_calc, fmt="%2.15f", delimiter=" ")
-    np.savetxt('exact_solution_' + OPfunc + '.txt',S_exact, fmt="%2.15f", delimiter=" ")
+        S_copy = S_calc.copy() # Copy the elements from S_calc to S_copy
+        ADI(S_copy,op)
+        np.savetxt(OPshem + '_function_' + OPfunc + '.txt',S_copy, fmt="%2.15f", delimiter=" ")
+        np.savetxt('Exact_solution_' + OPfunc + '.txt',S_exact, fmt="%2.15f", delimiter=" ")
     return
 #----------------------------------------------------------------
 def ERROR_routine():
@@ -510,8 +511,9 @@ def ERROR_routine():
         deltas()   #calculates dx, dy, dt
         exact_functions(S_exact,S_calc)
         for op in range(0,7):
-            ADI(S_calc,op+1)
-            RMS_e[op,i] = RMS(S_calc,S_exact)
+            S_copy = S_calc.copy() # Copy the elements from S_calc to S_copy
+            ADI(S_copy,op+1)
+            RMS_e[op,i] = RMS(S_copy,S_exact)
     np.savetxt('RMS_function_' + OPfunc + '.txt',RMS_e, fmt="%2.15f", delimiter=" ")
     return
 #----------------------------------------------------------------

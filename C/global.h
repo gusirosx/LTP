@@ -66,6 +66,11 @@ void w_fille(double**);
 // schemes
 void scheme_Selection(int);
 void RHS_schemes(int);
+void CDS();
+void FOU();
+void EXPO();
+void SOU();
+void QUICK();
 void LOADS_RHS();
 void UNIFAES_RHS();
 

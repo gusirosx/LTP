@@ -4,106 +4,126 @@ void scheme_Selection(int op)
 {
     double Lx,Ly,L1,L2,L3,L4;
     if (op == 1)
-    {
-        //CDS Coeficients
-        strcpy(OPshem,"CDS");
-        Lx  = dt/(2.0*dx*dx);
-        Ly  = dt/(2.0*dy*dy);
-        L1  = (Pe*dt*cos(alpha))/(4.0*dx);
-        L2  = (Pe*dt*sin(alpha))/(4.0*dy);
-        Ax  =-(L1 + Lx);
-        Bx  = (1.0 + 2.0*Lx);
-        Cx  = (L1 - Lx);
-        Ay  =-(L2 + Ly);
-        By  = (1.0 + 2.0*Ly);
-        Cy  = (L2 - Ly);
-        Dpx = (1.0 - 2.0*Ly);
-        Dpy = (1.0 - 2.0*Lx);
-    }
-    else if (op == 2) // Esquema FOU
-    {
-        //FOU Coeficients
-        strcpy(OPshem,"FOU");
-        Lx  = dt/(2.0*dx*dx);
-        Ly  = dt/(2.0*dy*dy);
-        L1  = (Pe*dt*cos(alpha))/(2.0*dx);
-        L2  = (Pe*dt*sin(alpha))/(2.0*dy);
-        Ax  =-(L1 + Lx);
-        Bx  = (1.0 + L1 + 2.0*Lx);
-        Cx  =- Lx;
-        Ay  =-(L2 + Ly);
-        By  = (1.0 + L2 + 2.0*Ly);
-        Cy  =- Ly;
-        Dpx = (1.0 - L2 - 2.0*Ly);
-        Dpy = (1.0 - L1 - 2.0*Lx);
-    }    
-    else if (op >= 3 && op <= 5)//Exponencial
-    {
-        //EXP Coeficients
-        strcpy(OPshem,"EXP");
-        L1  = (Pe*dt*cos(alpha))/(2.0*dx);
-        L2  = (Pe*dt*sin(alpha))/(2.0*dy);
-        L3  = exp(Pe*dx*cos(alpha));
-        L4  = exp(Pe*dy*sin(alpha));
-        Ax  =-(L3/(L3 - 1.0))*L1;
-        Bx  = (1.0 + ((L3 + 1.0)/(L3 - 1.0))*L1);
-        Cx  =-(1.0/(L3 - 1.0))*L1;
-        Ay  =-(L4/(L4 - 1.0))*L2;
-        By  = (1.0 + ((L4 + 1.0)/(L4 - 1.0))*L2);
-        Cy  =-(1.0/(L4 - 1.0))*L2;
-        Dpx = (1.0 - ((L4 + 1.0)/(L4 - 1.0))*L2);
-        Dpy = (1.0 - ((L3 + 1.0)/(L3 - 1.0))*L1);
-    }
+        CDS();
+    else if (op == 2)
+        FOU(); 
+    else if (op >= 3 && op <= 5)
+        EXPO();
     else if(op == 6)
-    {
-        //SOU Coeficients
-        strcpy(OPshem,"SOU");
-        Lx   = dt/(2.0*dx*dx);
-        Ly   = dt/(2.0*dy*dy);
-        L1   = (Pe*dt*cos(alpha))/(4.0*dx);
-        L2   = (Pe*dt*sin(alpha))/(4.0*dy);
-        Ax   =-(4.0*L1 + Lx);
-        Ax2  =-(2.0*L1 + Lx);
-        Bx   = (1.0 + 3.0*L1 + 2.0*Lx);
-        Bx2  = (1.0 + 2.0*L1 + 2.0*Lx);
-        Cx   = - Lx;
-        Ay   =-(4.0*L2 + Ly);
-        Ay2  =-(2.0*L2 + Ly);
-        By   = (1.0 + 3.0*L2 + 2.0*Ly);
-        By2  = (1.0 + 2.0*L2 + 2.0*Ly);
-        Cy   = - Ly;   
-        Xww  = - L1;
-        Yss  = - L2;
-        Dpx  = (1.0 - 3.0*L2 - 2.0*Ly);
-        Dpx2 = (1.0 - 2.0*L2 - 2.0*Ly);
-        Dpy  = (1.0 - 3.0*L1 - 2.0*Lx);
-        Dpy2 = (1.0 - 2.0*L1 - 2.0*Lx);
-    }
+        SOU();
     else if(op == 7)
-    {
-        //QUICK Coeficients
-        strcpy(OPshem,"QUICK");
-        Lx   = dt/(2*dx*dx);
-        Ly   = dt/(2*dy*dy);
-        L1   = (Pe*dt*cos(alpha))/(16*dx);
-        L2   = (Pe*dt*sin(alpha))/(16*dy);
-        Ax   =-(7*L1 + Lx);
-        Ax2  =-(5*L1 + Lx);
-        Bx   = (1 + 3*L1 + 2*Lx);
-        Bx2  = (1 + 2*L1 + 2*Lx);
-        Cx   = (3*L1 - Lx);
-        Ay   =-(7*L2 + Ly);
-        Ay2  =-(5*L2 + Ly);
-        By   = (1 + 3*L2 + 2*Ly);
-        By2  = (1 + 2*L2 + 2*Ly);
-        Cy   = (3*L2 - Ly);   
-        Xww  = - L1;
-        Yss  = - L2;
-        Dpx  = (1 - 3*L2 - 2*Ly);
-        Dpx2 = (1 - 2*L2 - 2*Ly);
-        Dpy  = (1 - 3*L1 - 2*Lx);
-        Dpy2 = (1 - 2*L1 - 2*Lx);
-    }
+        QUICK();
+}
+//================================================================
+void CDS()
+{
+    double Lx,Ly,L1,L2;
+    //CDS Coeficients
+    strcpy(OPshem,"CDS");
+    Lx  = dt/(2.0*dx*dx);
+    Ly  = dt/(2.0*dy*dy);
+    L1  = (Pe*dt*cos(alpha))/(4.0*dx);
+    L2  = (Pe*dt*sin(alpha))/(4.0*dy);
+    Ax  =-(L1 + Lx);
+    Bx  = (1.0 + 2.0*Lx);
+    Cx  = (L1 - Lx);
+    Ay  =-(L2 + Ly);
+    By  = (1.0 + 2.0*Ly);
+    Cy  = (L2 - Ly);
+    Dpx = (1.0 - 2.0*Ly);
+    Dpy = (1.0 - 2.0*Lx);
+}
+//================================================================
+void FOU()
+{
+    double Lx,Ly,L1,L2;
+    //FOU Coeficients
+    strcpy(OPshem,"FOU");
+    Lx  = dt/(2.0*dx*dx);
+    Ly  = dt/(2.0*dy*dy);
+    L1  = (Pe*dt*cos(alpha))/(2.0*dx);
+    L2  = (Pe*dt*sin(alpha))/(2.0*dy);
+    Ax  =-(L1 + Lx);
+    Bx  = (1.0 + L1 + 2.0*Lx);
+    Cx  =- Lx;
+    Ay  =-(L2 + Ly);
+    By  = (1.0 + L2 + 2.0*Ly);
+    Cy  =- Ly;
+    Dpx = (1.0 - L2 - 2.0*Ly);
+    Dpy = (1.0 - L1 - 2.0*Lx);
+}
+//================================================================
+void EXPO()
+{
+    double Lx,Ly,L1,L2,L3,L4;
+    //EXP Coeficients
+    strcpy(OPshem,"EXP");
+    L1  = (Pe*dt*cos(alpha))/(2.0*dx);
+    L2  = (Pe*dt*sin(alpha))/(2.0*dy);
+    L3  = exp(Pe*dx*cos(alpha));
+    L4  = exp(Pe*dy*sin(alpha));
+    Ax  =-(L3/(L3 - 1.0))*L1;
+    Bx  = (1.0 + ((L3 + 1.0)/(L3 - 1.0))*L1);
+    Cx  =-(1.0/(L3 - 1.0))*L1;
+    Ay  =-(L4/(L4 - 1.0))*L2;
+    By  = (1.0 + ((L4 + 1.0)/(L4 - 1.0))*L2);
+    Cy  =-(1.0/(L4 - 1.0))*L2;
+    Dpx = (1.0 - ((L4 + 1.0)/(L4 - 1.0))*L2);
+    Dpy = (1.0 - ((L3 + 1.0)/(L3 - 1.0))*L1);
+}
+//================================================================
+void SOU()
+{
+    double Lx,Ly,L1,L2;
+    //SOU Coeficients
+    strcpy(OPshem,"SOU");
+    Lx   = dt/(2.0*dx*dx);
+    Ly   = dt/(2.0*dy*dy);
+    L1   = (Pe*dt*cos(alpha))/(4.0*dx);
+    L2   = (Pe*dt*sin(alpha))/(4.0*dy);
+    Ax   =-(4.0*L1 + Lx);
+    Ax2  =-(2.0*L1 + Lx);
+    Bx   = (1.0 + 3.0*L1 + 2.0*Lx);
+    Bx2  = (1.0 + 2.0*L1 + 2.0*Lx);
+    Cx   = - Lx;
+    Ay   =-(4.0*L2 + Ly);
+    Ay2  =-(2.0*L2 + Ly);
+    By   = (1.0 + 3.0*L2 + 2.0*Ly);
+    By2  = (1.0 + 2.0*L2 + 2.0*Ly);
+    Cy   = - Ly;   
+    Xww  = - L1;
+    Yss  = - L2;
+    Dpx  = (1.0 - 3.0*L2 - 2.0*Ly);
+    Dpx2 = (1.0 - 2.0*L2 - 2.0*Ly);
+    Dpy  = (1.0 - 3.0*L1 - 2.0*Lx);
+    Dpy2 = (1.0 - 2.0*L1 - 2.0*Lx);
+}
+//================================================================
+void QUICK()
+{
+    double Lx,Ly,L1,L2;
+    //QUICK Coeficients
+    strcpy(OPshem,"QUICK");
+    Lx   = dt/(2*dx*dx);
+    Ly   = dt/(2*dy*dy);
+    L1   = (Pe*dt*cos(alpha))/(16*dx);
+    L2   = (Pe*dt*sin(alpha))/(16*dy);
+    Ax   =-(7*L1 + Lx);
+    Ax2  =-(5*L1 + Lx);
+    Bx   = (1 + 3*L1 + 2*Lx);
+    Bx2  = (1 + 2*L1 + 2*Lx);
+    Cx   = (3*L1 - Lx);
+    Ay   =-(7*L2 + Ly);
+    Ay2  =-(5*L2 + Ly);
+    By   = (1 + 3*L2 + 2*Ly);
+    By2  = (1 + 2*L2 + 2*Ly);
+    Cy   = (3*L2 - Ly);   
+    Xww  = - L1;
+    Yss  = - L2;
+    Dpx  = (1 - 3*L2 - 2*Ly);
+    Dpx2 = (1 - 2*L2 - 2*Ly);
+    Dpy  = (1 - 3*L1 - 2*Lx);
+    Dpy2 = (1 - 2*L1 - 2*Lx);
 }
 //================================================================
 void RHS_schemes(int op)
@@ -149,6 +169,7 @@ void LOADS_RHS()
 //================================================================
 void UNIFAES_RHS()
 {
+    //UNIFAES source term
     int i,j;
     double Px,Py,Pix,Piy,Xx,Xy,Zx,Zy,Kn,Ks,Kw,Ke,PIax,PIay,PIsx,PIsy;
     strcpy(OPshem,"UNIFAES");

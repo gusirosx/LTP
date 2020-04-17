@@ -1,6 +1,6 @@
 !=========== INPUT PARAMETERS =============!
 A                    !Function Type: A,B,C,D,CD,DC
-.false.               !Scheme Standard routine
+.true.               !Scheme Standard routine
 60.0d0               !Global Peclet Number
 6.0d0                !Eigenvalue 
 22.5d0               !Mesh offset angle

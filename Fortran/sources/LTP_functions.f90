@@ -362,7 +362,7 @@ module functions
         implicit none
         Character(len = 60) :: aux
         integer:: error
-        open(unit=60,file="input.ltp",form="formatted",&
+        open(unit=60,file="input/input.ltp",form="formatted",&
                     status="unknown",access = "sequential",&
                     action="read",iostat=error)
        if(error /= 0) then

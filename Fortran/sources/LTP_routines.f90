@@ -20,10 +20,10 @@
         do op=1,7
             S_copy = S_calc !Copy the elements from S_calc to S_copy
             call ADI(S_copy,op)
-            name = trim(OPshem)//trim('_function_') // trim(OPfunc)//trim('.txt')
+            name = trim('output/')//trim(OPshem)//trim('_function_') // trim(OPfunc)//trim('.dat')
             call w_fille(S_copy,name,20)
         end do
-        name = trim('Exact_solution_') // trim(OPfunc)//trim('.txt')
+        name = trim('output/')//trim('Exact_solution_') // trim(OPfunc)//trim('.dat')
         call w_fille(S_exact,name,20)        
         deallocate(S_copy,S_exact,S_calc,x,y)
     end subroutine Scheme_routine
@@ -55,7 +55,7 @@
             end do
             deallocate(S_copy,S_exact,S_calc,x,y)
         end do
-        name = trim('RMS_function_') // trim(OPfunc)//trim('.txt')
+        name = trim('output/')//trim('RMS_function_') // trim(OPfunc)//trim('.dat')
         call w_fille(RMS_e,name,20)
         deallocate(rms_v,RMS_e)
     end subroutine ERROR_routine

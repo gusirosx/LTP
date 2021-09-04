@@ -10,43 +10,78 @@ FFLAGS=-c
 #FFLAGS=-c -O4
 #FFLAGS=-c -O5
 
-FSOURCES=LTP_main.o LTP_global.o LTP_functions.o LTP_schemes.o LTP_routines.o
+#FOLDERS
+OUT = ./output
+BIN = ./bin
+SRC = ./sources
 
-$(PROGRAM): $(FSOURCES)
-	$(FC)  $(FSOURCES) -o $(PROGRAM)
+#SOURCES
+MAIN = $(SRC)/LTP_main.f90
+FSOURCES = $(BIN)/LTP_global.o $(BIN)/LTP_schemes.o $(BIN)/LTP_functions.o $(BIN)/LTP_routines.o
 
-LTP_global.mod: LTP_global.f90 LTP_global.o 
-	$(FC) $(FFLAGS) LTP_global.f90
+all: create $(PROGRAM)
 
-LTP_global.o: LTP_global.f90
-	$(FC) $(FFLAGS) LTP_global.f90
+$(PROGRAM): $(MAIN) $(FSOURCES)
+	$(FC)  $(FSOURCES) $(MAIN) -I $(BIN) -o $(BIN)/$(PROGRAM)
+	@echo ' '
+	@echo '--- Finished Building Program: $@ ---'
 
-LTP_schemes.mod: LTP_schemes.f90 LTP_schemes.o LTP_global.mod 
-	$(FC) $(FFLAGS) LTP_schemes.f90
+$(BIN)/%.o: $(SRC)/%.f90
+	$(FC) $(FFLAGS) $< -J $(BIN) -o $@
 
-LTP_schemes.o: LTP_schemes.f90 LTP_global.mod
-	$(FC) $(FFLAGS) LTP_schemes.f90
-
-LTP_functions.mod: LTP_functions.f90 LTP_functions.o LTP_global.mod LTP_schemes.mod
-	$(FC) $(FFLAGS) LTP_functions.f90
-
-LTP_functions.o: LTP_functions.f90 LTP_global.mod LTP_schemes.mod
-	$(FC) $(FFLAGS) LTP_functions.f90
+run: create $(PROGRAM)
+	./bin/$(PROGRAM)
 	
-LTP_routines.mod: LTP_routines.f90 LTP_routines.o LTP_global.mod LTP_schemes.mod LTP_functions.mod
-	$(FC) $(FFLAGS) LTP_routines.f90
-
-LTP_routines.o: LTP_routines.f90 LTP_global.mod LTP_schemes.mod LTP_functions.mod
-	$(FC) $(FFLAGS) LTP_routines.f90
-
-LTP_main.o: LTP_main.f90  LTP_routines.mod
-	$(FC) $(FFLAGS) LTP_main.f90
-
-run: $(PROGRAM)
-	./$(PROGRAM)
-
 clean:
-	rm -f *.f90~
-	rm -f *.mod
-	rm -f *.o
-	rm -f *.exe
+	rm -f $(BIN)/*
+	rm -f $(OUT)/*
+	
+delete:
+	rm -r $(BIN)
+	rm -r $(OUT)
+	
+create:
+	@mkdir -p $(OUT) $(BIN)
+
+cleanout:
+	rm -f $(OUT)/*
+	
+#Backup
+date=` data +%F `
+version=` date +%d.%m.%y_%H.%M`
+
+output      = ../$(PROGRAM)_$(version).tar.gz
+saveindir   = ../$(PROGRAM)_INPUT_$(version).tar.gz
+casedir     = ../$(PROGRAM)_CASE_$(version).tar.gz
+files       = ./sources/*.f90 ./input/*.ltp ./makefile
+files_input = ./input/*.ltp
+files_case  = ./input/*.ltp ./output/*
+backup:
+	@tar -czvf $(output) $(files)
+	@echo '--- All program files have been saved ---'
+	
+saveinput: 
+	@tar -czvf $(saveindir) $(files_input)
+	@echo '--- All input files have been saved ---'
+	
+savecase: 
+	@tar -czvf $(casedir) $(files_case)
+	@echo '--- All case files have been saved ---'
+	
+help: 
+	@echo '_________________________________________________________________________'
+	@echo '                                                                         '
+	@echo '                           Make Assistant Tool                           '
+	@echo '_________________________________________________________________________'
+	@echo '                               Make Flags                                '
+	@echo '         make  < flag >                                                  '
+	@echo '               run           : build and execute'
+	@echo '               clean         : clears compilation files'
+	@echo '               delete        : delete directories created'
+	@echo '               cleanout      : clean results directory'
+	@echo '               backup        : performs a code backup'
+	@echo '               saveinput     : backup all input files'
+	@echo '               savecase      : backup all case files'
+	@echo '_________________________________________________________________________'
+
+.PHONY: clean backup delete run

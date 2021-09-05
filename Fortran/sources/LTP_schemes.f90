@@ -170,7 +170,7 @@ module schemes
     subroutine UNIFAES_RHS(Ta,RHS_UNI)
         !UNIFAES source term
         double precision, dimension(:,:):: Ta,RHS_UNI
-        double precision :: Px,Py,Pix,Piy,Xx,Xy,Zx,Zy,Kn,Ks,Kw,Ke, &
+        double precision :: Px,Py,Pix,Piy,Xx,Xy,Kn,Ks,Kw,Ke, &
                             PIax,PIay,PIsx,PIsy
         integer ::i,j
         OPshem = 'UNIFAES'

@@ -4,20 +4,20 @@ module global
     double precision, allocatable, dimension(:,:):: &
     S_exact,            & !Exact solution
     S_calc                !Calculated solution
-    real, allocatable, dimension(:):: &
+    double precision, allocatable, dimension(:):: &
     x,                  & !Determine the x positions
     y                     !Determine the y positions
     double precision :: &
+    lamb,               & !Eigenvalue 
+    theta,              & !Mesh offset angle
+    alpha,              &
     dx,                 &
     dy,                 &
     dt,                 &
     TOL,                & !Convergence tolerance
     Pe,                 & !Global Peclet Number
     pi = 3.14159265359d0  !Pi number
-    real ::             &
-    lamb,               & !Eigenvalue 
-    theta,              & !Mesh offset angle
-    alpha
+
     integer ::          &
     N                     !Nodes in x and y direction                        
     Character(len=60):: &

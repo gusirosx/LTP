@@ -7,8 +7,7 @@ module functions
     subroutine norm_function(S)
         !Normalization by the max value of a 2D array
         double precision, dimension(:,:):: S
-        integer :: i,j
-        real :: F
+        double precision :: F
         F = maxval(S) - minval(S)
         S = S/F
     end subroutine norm_function
@@ -23,8 +22,8 @@ module functions
         !Determine the x and y positions for solutions A, B, C, D
         x = 0.0d0; y = 0.0d0
         do i = 1, N
-            x(i) = -0.5 + (i-1.0d0)*dx
-            y(i) = -0.5 + (i-1.0d0)*dy
+            x(i) = -0.5d0 + (i-1.0d0)*dx
+            y(i) = -0.5d0 + (i-1.0d0)*dy
         end do
     end subroutine deltas
     !================================================================

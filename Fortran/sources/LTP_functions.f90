@@ -382,7 +382,12 @@ module functions
         read(60,*)rms_flag
         read(60,*)N_i
         read(60,*)N_f
-        read(60,*)IJ        
+        read(60,*)IJ
+        read(60,*)aux
+        read(60,*)eigenvalue_flag
+        read(60,*)lambda_i
+        read(60,*)lambda_f
+        read(60,*)lambda_j
         close(60)
     end subroutine input_data
     !================================================================

@@ -24,13 +24,19 @@ module global
     OPfunc,             & !Select the Function
     OPshem,             & !Select the scheme 
     name
-    logical ::          & !rms routine flag
-    rms_flag,           & !scheme flag
-    sheme_flag
+    logical ::          & 
+    rms_flag,           & !rms routine flag
+    sheme_flag,         & !scheme flag
+    eigenvalue_flag       !eigenvalue flag
     !====== Error Evaluation Routine ======!
     integer ::          & 
     N_i,                & !Initial mesh
     N_f,                & !Final mesh
     IJ                    !Jump Interval
-    
+    !==== EIGENVALUE ERROR EVALUATION ROUTINE ====!
+    double precision :: &
+    lambda_i,           &!Initial lambda
+    lambda_f,           &!Final lambda
+    lambda_j             !Jump Interval
+
 end module global

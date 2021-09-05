@@ -1,13 +1,19 @@
-!=========== INPUT PARAMETERS =============!
-A                    !Function Type: A,B,C,D,CD,DC
-.true.               !Scheme Standard routine
-60.0d0               !Global Peclet Number
+!============= INPUT PARAMETERS ==============!
+CD                    !Function Type: A,B,C,D,CD,DC
+.false.               !Scheme Standard routine
+10.0d0               !Global Peclet Number
 6.0d0                !Eigenvalue 
 22.5d0               !Mesh offset angle
-1.0d-5               !Convergence tolerance
-10                   !Control Volumes in x and y direction
-!======= ERROR EVALUATION ROUTINE =========!
-.false.              !Enables or disables the rms routine
+1.0d-7               !Convergence tolerance
+20                   !Control Volumes in x and y direction
+!========= ERROR EVALUATION ROUTINE ==========!
+.false.              !RMS routine
 10                   !Initial mesh
 100                  !Final mesh
 10                   !Jump Interval
+!==== EIGENVALUE ERROR EVALUATION ROUTINE ====!
+.true.              !Eigenvalue routine
+5.0d0                !Initial lambda
+30.0d0                 !Final lambda
+0.1d0                !Jump Interval
+

@@ -6,6 +6,7 @@ FC   = gfortran
 
 #RUN
 FFLAGS=-c
+#FFLAGS=-c -g -Wall -Werror -Wconversion -Wno-unused-dummy-argument -fbacktrace -fcheck=all
 #FFLAGS=-c -O3
 #FFLAGS=-c -O4
 #FFLAGS=-c -O5

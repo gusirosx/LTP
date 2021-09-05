@@ -7,4 +7,6 @@ program LTP
     
     if(sheme_flag) call Scheme_routine
     
+    if(eigenvalue_flag) call Eigenvalue_routine
+    
 end program LTP

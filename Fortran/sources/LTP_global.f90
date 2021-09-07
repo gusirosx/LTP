@@ -27,6 +27,10 @@ module global
     logical ::          & 
     rms_flag,           & !rms routine flag
     sheme_flag,         & !scheme flag
+    angle_flag,         & !scheme flag
+    Pe_flag,            & !Pe flag
+    file_flag,          &
+    HSF_flag,           & !HSF flag
     eigenvalue_flag       !eigenvalue flag
     !====== Error Evaluation Routine ======!
     integer ::          & 
@@ -38,5 +42,15 @@ module global
     lambda_i,           &!Initial lambda
     lambda_f,           &!Final lambda
     lambda_j             !Jump Interval
+    !==== ANGLE ERROR EVALUATION ROUTINE ====!
+    double precision :: &
+    angle_i,            &!Initial angle
+    angle_f,            &!Final angle
+    angle_j             !Jump Interval
+    !==== PECLET ERROR EVALUATION ROUTINE ====!
+    double precision :: &
+    Pe_i,               &!Initial angle
+    Pe_f,               &!Final angle
+    Pe_j                 !Jump Interval
 
 end module global

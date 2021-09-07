@@ -321,6 +321,31 @@ module functions
         end do 
     end subroutine exact_functions
     !================================================================
+    subroutine HSF_functions(S_sol,S_c)
+        integer :: i,j
+        double precision :: S_sol(:,:),S_c(:,:),aux
+        !Calculation of the exact solution - Heaviside Step Function
+        S_sol = 0.0d0
+        do i=1,N
+            aux = tan(alpha)*x(i)
+            do j=1,N
+                if(y(i) > aux)then
+                    S_sol(i,j) = 1.0d0
+                else if(abs(y(i) - aux)<1.0d-3)then
+                    S_sol(i,j) = 0.5d0
+                end if
+            end do
+        end do 
+        !Applies boundary conditions
+        S_c = 0.0d0
+        do i=1,N
+            S_c(1,i) = S_sol(1,i)
+            S_c(N,i) = S_sol(N,i)
+            S_c(i,1) = S_sol(i,1)
+            S_c(i,N) = S_sol(i,N)
+        end do 
+    end subroutine HSF_functions
+    !================================================================
     subroutine write_matrix(a)
         double precision, dimension(:,:):: a
         integer :: i,j
@@ -377,6 +402,8 @@ module functions
         read(60,*)TOL
         read(60,*)N
         N = N + 1
+        read(60,*)file_flag
+        read(60,*)HSF_flag
         read(60,*)aux
         read(60,*)rms_flag
         read(60,*)N_i
@@ -387,6 +414,16 @@ module functions
         read(60,*)lambda_i
         read(60,*)lambda_f
         read(60,*)lambda_j
+        read(60,*)aux
+        read(60,*)angle_flag
+        read(60,*)angle_i
+        read(60,*)angle_f
+        read(60,*)angle_j
+        read(60,*)aux
+        read(60,*)Pe_flag
+        read(60,*)Pe_i
+        read(60,*)Pe_f
+        read(60,*)Pe_j
         close(60)
     end subroutine input_data
     !================================================================

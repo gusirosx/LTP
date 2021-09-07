@@ -1,19 +1,31 @@
 !============= INPUT PARAMETERS ==============!
-CD                    !Function Type: A,B,C,D,CD,DC
-.false.               !Scheme Standard routine
-10.0d0               !Global Peclet Number
-6.0d0                !Eigenvalue 
-22.5d0               !Mesh offset angle
-1.0d-7               !Convergence tolerance
-20                   !Control Volumes in x and y direction
+A                   !Function Type: A,B,C,D,CD,DC
+.false.             !Scheme Standard routine
+8.0d3               !Global Peclet Number
+10.0d0              !Eigenvalue 
+30.0d0              !Mesh offset angle
+1.0d-7              !Convergence tolerance
+40                  !Control Volumes in x and y direction
+.false.             !Save results from each scheme
+.false.             !Heaviside Step Function
 !========= ERROR EVALUATION ROUTINE ==========!
-.false.              !RMS routine
-10                   !Initial mesh
-100                  !Final mesh
-10                   !Jump Interval
+.true.              !RMS routine
+10                  !Initial mesh
+200                 !Final mesh
+10                  !Jump Interval
 !==== EIGENVALUE ERROR EVALUATION ROUTINE ====!
-.true.              !Eigenvalue routine
-5.0d0                !Initial lambda
-30.0d0                 !Final lambda
-0.1d0                !Jump Interval
+.false.             !Eigenvalue routine
+0.1d0               !Initial lambda
+5.0d0               !Final lambda
+0.1d0               !Jump Interval
+!==== ANGLE ERROR EVALUATION ROUTINE ====!
+.false.             !angle routine
+0.0d0               !Initial angle
+45.0d0              !Final angle
+5.0d0               !Jump Interval
+!==== Peclet ERROR EVALUATION ROUTINE ====!
+.false.             !angle routine
+0.0d0               !Initial angle
+4.0d3               !Final angle
+1.0d2               !Jump Interval
 
